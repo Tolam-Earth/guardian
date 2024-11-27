@@ -215,9 +215,9 @@ export class Users extends NatsService {
     /**
      * Get all user accounts demo
      */
-    public async getAllUserAccountsDemo() {
-        return await this.sendMessage(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO);
-    }
+    // public async getAllUserAccountsDemo() {
+    //     return await this.sendMessage(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO);
+    // }
 
     /**
      * Generate new template
