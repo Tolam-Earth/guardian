@@ -75,10 +75,12 @@
                             [disabled]="!this.loginForm.controls['login'].value || !this.loginForm.controls['password'].value"
                             class="button full-width" label="Log In" pButton type="submit"></button>
                 </div>
+                <!--
                 <div class="sign-up">
                     <span>Don’t have an Account?</span>
                     <span (click)="signUpInit()" class="primary-text-button">Sign Up</span>
                 </div>
+                -->
             </form>
         </div>
         <div *ngIf="loading" class="preloader preloader-image-l-size"></div>
