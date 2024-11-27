@@ -275,67 +275,67 @@ export class LoginComponent implements OnInit, OnDestroy {
         return environment.isMeecoConfigured;
     }
 
-    signUpInit() {
-        const registerAccount = (userRole: UserRole, userData: any) => {
-            this.brandingLoading = true;
-            this.auth.createUser(userData.username, userData.password, userData.confirmPassword, userRole).subscribe((result) => {
-                if (result.error) {
-                    this.error = result.error;
-                    this.brandingLoading = false;
+    // signUpInit() {
+    //     const registerAccount = (userRole: UserRole, userData: any) => {
+    //         this.brandingLoading = true;
+    //         this.auth.createUser(userData.username, userData.password, userData.confirmPassword, userRole).subscribe((result) => {
+    //             if (result.error) {
+    //                 this.error = result.error;
+    //                 this.brandingLoading = false;
 
-                    return;
-                }
-                this.login(userData.username, userData.password);
-            }, ({ error }) => {
-                this.error = error.message;
-                this.loading = false;
-                this.brandingLoading = false;
-            })
-        }
+    //                 return;
+    //             }
+    //             this.login(userData.username, userData.password);
+    //         }, ({ error }) => {
+    //             this.error = error.message;
+    //             this.loading = false;
+    //             this.brandingLoading = false;
+    //         })
+    //     }
 
-        const part3 = (userRole: UserRole) => {
-            this.dialogService.open(RegisterDialogComponent, {
-                header: 'Sign Up Request',
-                width: '640px',
-                modal: true,
-            }).onClose.subscribe((userData) => {
-                if (userData) {
-                    registerAccount(userRole, userData);
-                }
-            })
-        }
+    //     const part3 = (userRole: UserRole) => {
+    //         this.dialogService.open(RegisterDialogComponent, {
+    //             header: 'Sign Up Request',
+    //             width: '640px',
+    //             modal: true,
+    //         }).onClose.subscribe((userData) => {
+    //             if (userData) {
+    //                 registerAccount(userRole, userData);
+    //             }
+    //         })
+    //     }
 
-        const part2 = () => {
-            this.dialogService.open(AccountTypeSelectorDialogComponent, {
-                header: 'Select Account Type',
-                width: '640px',
-                modal: true,
-            }).onClose.subscribe((userRole) => {
-                if (userRole) {
-                    part3(userRole);
-                }
-            })
-        }
+    //     const part2 = () => {
+    //         this.dialogService.open(AccountTypeSelectorDialogComponent, {
+    //             header: 'Select Account Type',
+    //             width: '640px',
+    //             modal: true,
+    //         }).onClose.subscribe((userRole) => {
+    //             if (userRole) {
+    //                 part3(userRole);
+    //             }
+    //         })
+    //     }
 
-        if (this.isMgsMode) {
-            part2();
-        } else {
-            part3(UserRole.USER)
-        }
-    }
+    //     if (this.isMgsMode) {
+    //         part2();
+    //     } else {
+    //         part3(UserRole.USER)
+    //     }
+    // }
 
-    forgotPasswordInit() {
-        this.dialogService.open(ForgotPasswordDialogComponent, {
-            header: 'Request Password Reset',
-            width: '640px',
-            modal: true,
-            data: {
-                login: this.loginControl.value,
-            }
-        }).onClose.subscribe((data) => {
-            if (data) {
-                console.log(data);
-            }
-        });
-    }
+    // forgotPasswordInit() {
+    //     this.dialogService.open(ForgotPasswordDialogComponent, {
+    //         header: 'Request Password Reset',
+    //         width: '640px',
+    //         modal: true,
+    //         data: {
+    //             login: this.loginControl.value,
+    //         }
+    //     }).onClose.subscribe((data) => {
+    //         if (data) {
+    //             console.log(data);
+    //         }
+    //     });
+    // }
 }
