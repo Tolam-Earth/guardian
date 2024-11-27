@@ -458,9 +458,9 @@ export class UsersService {
     /**
      * Get all user accounts demo
      */
-    public async getAllUserAccountsDemo() {
-        return await this.users.getAllUserAccountsDemo();
-    }
+    // public async getAllUserAccountsDemo() {
+    //     return await this.users.getAllUserAccountsDemo();
+    // }
 
     /**
      * Get all standard registries
