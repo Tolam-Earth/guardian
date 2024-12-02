@@ -56,7 +56,7 @@ import { GuardiansService } from './helpers/guardians.js';
 import { mapAPI } from './api/map.service.js';
 import { tagsAPI } from './api/tag.service.js';
 import { setDefaultSchema } from './api/helpers/schema-helper.js';
-import { demoAPI } from './api/demo.service.js';
+//import { demoAPI } from './api/demo.service.js';
 import { themeAPI } from './api/theme.service.js';
 import { brandingAPI } from './api/branding.service.js';
 import { wizardAPI } from './api/wizard.service.js';
@@ -72,6 +72,8 @@ import { SynchronizationTask } from './helpers/synchronization-task.js';
 import { recordAPI } from './api/record.service.js';
 import { projectsAPI } from './api/projects.service.js';
 import { AISuggestionsService } from './helpers/ai-suggestions.js';
+import { AssignedEntityAPI } from './api/assigned-entity.service.js';
+import { permissionAPI } from './api/permission.service.js';
 
 export const obj = {};
 
@@ -167,7 +169,7 @@ Promise.all([
         await loaderAPI(didDocumentRepository, schemaRepository);
         await profileAPI();
         await documentsAPI(didDocumentRepository, vcDocumentRepository, vpDocumentRepository, policyRepository);
-        await demoAPI(settingsRepository);
+        //await demoAPI(settingsRepository);
         await trustChainAPI(didDocumentRepository, vcDocumentRepository, vpDocumentRepository);
         await artifactAPI();
         await contractAPI(contractRepository,
@@ -187,6 +189,8 @@ Promise.all([
         await brandingAPI(brandingRepository);
         await suggestionsAPI();
         await projectsAPI();
+        await AssignedEntityAPI()
+        await permissionAPI();
     } catch (error) {
         console.error(error.message);
         process.exit(0);

@@ -344,9 +344,11 @@
                     </div>
                 </ng-container>
                 <ng-template #notLogged>
+                    <!--
                     <div class="example-icon admin-panel">
                         <span>Demo Admin Panel</span>
                     </div>
+                    -->
                 </ng-template>
                 <button mat-icon-button class="user-info-icon">
                     <mat-icon>{{menuIcon}}</mat-icon>
@@ -355,10 +357,10 @@
         </div>
 
         <mat-menu #menu="matMenu" xPosition="before">
-            <button *ngIf="isLogin && role === 'STANDARD_REGISTRY'" mat-menu-item
-                (click)="doBranding()">Branding</button>
+            <button *ngIf="isLogin && role === 'STANDARD_REGISTRY'" mat-menu-item (click)="doBranding()">Branding</button>
             <button *ngIf="isLogin" mat-menu-item (click)="logOut()">Log out</button>
 
+            <!--
             <div *ngIf="!isLogin" mat-menu-item class="demo-menu">
                 <div class="debug-user">
                     <button mat-raised-button (click)="authState.doLogin('StandardRegistry','test')">Standard Registry</button>
@@ -385,6 +387,7 @@
                     </div>
                 </div>
             </div>
+            -->
         </mat-menu>
     </mat-toolbar>
 </div>
