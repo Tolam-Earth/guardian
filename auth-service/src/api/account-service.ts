@@ -11,14 +11,14 @@ import {
     IGenerateTokenMessage,
     IGenerateTokenResponse,
     IGetAllUserResponse,
-    IGetDemoUserResponse,
+    // IGetDemoUserResponse,
     IGetUserByIdMessage,
     IGetUserByTokenMessage,
     IGetUserMessage,
     IGetUsersByAccountMessage,
     IGetUsersByIdMessage,
     IGetUsersByIRoleMessage,
-    IRegisterNewUserMessage,
+    // IRegisterNewUserMessage,
     ISaveUserMessage,
     IStandardRegistryUserResponse,
     IUpdateUserMessage,
@@ -67,75 +67,75 @@ export class AccountService extends NatsService {
             }
         });
 
-        this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.REGISTER_NEW_USER, async (msg) => {
-            try {
-                const userRepository = new DataBaseHelper(User);
+        // this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.REGISTER_NEW_USER, async (msg) => {
+        //     try {
+        //         const userRepository = new DataBaseHelper(User);
 
-                const { username, password, role } = msg;
-                const passwordDigest = crypto.createHash('sha256').update(password).digest('hex');
+        //         const { username, password, role } = msg;
+        //         const passwordDigest = crypto.createHash('sha256').update(password).digest('hex');
 
-                const checkUserName = await userRepository.count({ username });
-                if (checkUserName) {
-                    return new MessageError('An account with the same name already exists.');
-                }
+        //         const checkUserName = await userRepository.count({ username });
+        //         if (checkUserName) {
+        //             return new MessageError('An account with the same name already exists.');
+        //         }
 
-                const user = userRepository.create({
-                    username,
-                    password: passwordDigest,
-                    role,
-                    // walletToken: crypto.createHash('sha1').update(Math.random().toString()).digest('hex'),
-                    walletToken: '',
-                    parent: null,
-                    did: null
-                });
-                return new MessageResponse(await userRepository.save(user));
+        //         const user = userRepository.create({
+        //             username,
+        //             password: passwordDigest,
+        //             role,
+        //             // walletToken: crypto.createHash('sha1').update(Math.random().toString()).digest('hex'),
+        //             walletToken: '',
+        //             parent: null,
+        //             did: null
+        //         });
+        //         return new MessageResponse(await userRepository.save(user));
 
-            } catch (error) {
-                new Logger().error(error, ['AUTH_SERVICE']);
-                return new MessageError(error)
-            }
-        });
+        //     } catch (error) {
+        //         new Logger().error(error, ['AUTH_SERVICE']);
+        //         return new MessageError(error)
+        //     }
+        // });
 
-        this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.GENERATE_NEW_TOKEN_BASED_ON_USER_PROVIDER,
-          async (msg: ProviderAuthUser) => {
-            try {
-                const userRepository = new DataBaseHelper(User);
-                let user = await userRepository.findOne({
-                    username: msg.username
-                });
+        // this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.GENERATE_NEW_TOKEN_BASED_ON_USER_PROVIDER,
+        //   async (msg: ProviderAuthUser) => {
+        //     try {
+        //         const userRepository = new DataBaseHelper(User);
+        //         let user = await userRepository.findOne({
+        //             username: msg.username
+        //         });
 
-                if (!user) {
-                    user = userRepository.create({
-                        username: msg.username,
-                        password: null,
-                        role: msg.role,
-                        // walletToken: crypto.createHash('sha1').update(Math.random().toString()).digest('hex'),
-                        walletToken: '',
-                        parent: null,
-                        did: null,
-                        provider: msg.provider,
-                        providerId: msg.providerId
-                    });
-                    await userRepository.save(user);
-                }
-                const secretManager = SecretManager.New();
-                const { ACCESS_TOKEN_SECRET } = await secretManager.getSecrets('secretkey/auth')
-                const accessToken = sign({
-                    username: user.username,
-                    did: user.did,
-                    role: user.role
-                }, ACCESS_TOKEN_SECRET);
-                return new MessageResponse({
-                    username: user.username,
-                    did: user.did,
-                    role: user.role,
-                    accessToken
-                })
-            } catch (error) {
-                new Logger().error(error, ['AUTH_SERVICE']);
-                return new MessageError(error)
-            }
-        });
+        //         if (!user) {
+        //             user = userRepository.create({
+        //                 username: msg.username,
+        //                 password: null,
+        //                 role: msg.role,
+        //                 // walletToken: crypto.createHash('sha1').update(Math.random().toString()).digest('hex'),
+        //                 walletToken: '',
+        //                 parent: null,
+        //                 did: null,
+        //                 provider: msg.provider,
+        //                 providerId: msg.providerId
+        //             });
+        //             await userRepository.save(user);
+        //         }
+        //         const secretManager = SecretManager.New();
+        //         const { ACCESS_TOKEN_SECRET } = await secretManager.getSecrets('secretkey/auth')
+        //         const accessToken = sign({
+        //             username: user.username,
+        //             did: user.did,
+        //             role: user.role
+        //         }, ACCESS_TOKEN_SECRET);
+        //         return new MessageResponse({
+        //             username: user.username,
+        //             did: user.did,
+        //             role: user.role,
+        //             accessToken
+        //         })
+        //     } catch (error) {
+        //         new Logger().error(error, ['AUTH_SERVICE']);
+        //         return new MessageError(error)
+        //     }
+        // });
 
         this.getMessages<IGenerateTokenMessage, IGenerateTokenResponse>(AuthEvents.GENERATE_NEW_TOKEN, async (msg) => {
             try {
@@ -239,20 +239,20 @@ export class AccountService extends NatsService {
             }
         });
 
-        this.getMessages<any, IGetDemoUserResponse[]>(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO, async (_) => {
-            try {
-                const userAccounts = (await new DataBaseHelper(User).findAll()).map((e) => ({
-                    parent: e.parent,
-                    did: e.did,
-                    username: e.username,
-                    role: e.role
-                }));
-                return new MessageResponse(userAccounts);
-            } catch (error) {
-                new Logger().error(error, ['AUTH_SERVICE']);
-                return new MessageError(error);
-            }
-        });
+        // this.getMessages<any, IGetDemoUserResponse[]>(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO, async (_) => {
+        //     try {
+        //         const userAccounts = (await new DataBaseHelper(User).findAll()).map((e) => ({
+        //             parent: e.parent,
+        //             did: e.did,
+        //             username: e.username,
+        //             role: e.role
+        //         }));
+        //         return new MessageResponse(userAccounts);
+        //     } catch (error) {
+        //         new Logger().error(error, ['AUTH_SERVICE']);
+        //         return new MessageError(error);
+        //     }
+        // });
 
         this.getMessages<IGetUserMessage, User>(AuthEvents.GET_USER, async (msg) => {
             const { username } = msg;

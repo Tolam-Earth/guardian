@@ -56,7 +56,7 @@ import { GuardiansService } from './helpers/guardians.js';
 import { mapAPI } from './api/map.service.js';
 import { tagsAPI } from './api/tag.service.js';
 import { setDefaultSchema } from './api/helpers/schema-helper.js';
-import { demoAPI } from './api/demo.service.js';
+// import { demoAPI } from './api/demo.service.js';
 import { themeAPI } from './api/theme.service.js';
 import { brandingAPI } from './api/branding.service.js';
 import { wizardAPI } from './api/wizard.service.js';
@@ -167,7 +167,7 @@ Promise.all([
         await loaderAPI(didDocumentRepository, schemaRepository);
         await profileAPI();
         await documentsAPI(didDocumentRepository, vcDocumentRepository, vpDocumentRepository, policyRepository);
-        await demoAPI(settingsRepository);
+        // await demoAPI(settingsRepository);
         await trustChainAPI(didDocumentRepository, vcDocumentRepository, vpDocumentRepository);
         await artifactAPI();
         await contractAPI(contractRepository,

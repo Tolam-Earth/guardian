@@ -35,11 +35,11 @@ export class AuthService {
         );
     }
 
-    public createUser(username: string, password: string, confirmPassword: string, role: string): Observable<any> {
-        return this.http.post<any>(`${this.url}/register`, {
-            username, password, password_confirmation: confirmPassword, role
-        })
-    }
+    // public createUser(username: string, password: string, confirmPassword: string, role: string): Observable<any> {
+    //     return this.http.post<any>(`${this.url}/register`, {
+    //         username, password, password_confirmation: confirmPassword, role
+    //     })
+    // }
 
     public sessions(): Observable<ISession | null> {
         if (!localStorage.getItem('accessToken')) {

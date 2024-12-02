@@ -33,7 +33,8 @@ export class HeaderComponent implements OnInit {
     balanceInit: boolean = false;
     ws!: any;
     authSubscription!: any;
-    displayDemoAccounts: boolean = environment.displayDemoAccounts;
+    // displayDemoAccounts: boolean = environment.displayDemoAccounts;
+    displayDemoAccounts: boolean = false;
     hederaAccountID: string | undefined;
     profileData: IUser | null = null;
     mobileMenuOpen: boolean = false;

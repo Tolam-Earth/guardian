@@ -83,56 +83,56 @@ export class AccountApi {
             $ref: getSchemaPath(InternalServerErrorDTO)
         }
     })
-    @Post('/register')
-    @HttpCode(HttpStatus.CREATED)
-    async register(@Body() body: RegisterUserDTO, @Req() req: any): Promise<AccountsResponseDTO> {
-        const users = new Users();
-        if (!ApplicationEnvironment.demoMode) {
-            const authHeader = req.headers.authorization;
-            const token = authHeader?.split(' ')[1];
-            let user;
-            try {
-                user = await users.getUserByToken(token) as IAuthUser;
-            } catch (e) {
-                user = null;
-            }
+    // @Post('/register')
+    // @HttpCode(HttpStatus.CREATED)
+    // async register(@Body() body: RegisterUserDTO, @Req() req: any): Promise<AccountsResponseDTO> {
+    //     const users = new Users();
+    //     if (!ApplicationEnvironment.demoMode) {
+    //         const authHeader = req.headers.authorization;
+    //         const token = authHeader?.split(' ')[1];
+    //         let user;
+    //         try {
+    //             user = await users.getUserByToken(token) as IAuthUser;
+    //         } catch (e) {
+    //             user = null;
+    //         }
 
-            if (!user) {
-                throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
-            }
-            try {
-                await checkPermission(UserRole.STANDARD_REGISTRY)(user);
-            } catch (error) {
-                new Logger().error(error.message, ['API_GATEWAY']);
-                throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-        try {
-            const {username, password} = body;
-            let {role} = body;
-            // @deprecated 2022-10-01
-            if (role === 'ROOT_AUTHORITY') {
-                role = UserRole.STANDARD_REGISTRY;
-            }
-            const user = (await users.registerNewUser(
-                username,
-                password,
-                role
-            )) as any;
-            await NotificationHelper.info(
-                'Welcome to guardian',
-                'Next register your account in hedera',
-                user.id,
-            );
-            return user;
-        } catch (error) {
-            new Logger().error(error, ['API_GATEWAY']);
-            if (error.message.includes('already exists')) {
-                throw new HttpException('An account with the same name already exists.', HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    //         if (!user) {
+    //             throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    //         }
+    //         try {
+    //             await checkPermission(UserRole.STANDARD_REGISTRY)(user);
+    //         } catch (error) {
+    //             new Logger().error(error.message, ['API_GATEWAY']);
+    //             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    //         }
+    //     }
+    //     try {
+    //         const {username, password} = body;
+    //         let {role} = body;
+    //         // @deprecated 2022-10-01
+    //         if (role === 'ROOT_AUTHORITY') {
+    //             role = UserRole.STANDARD_REGISTRY;
+    //         }
+    //         const user = (await users.registerNewUser(
+    //             username,
+    //             password,
+    //             role
+    //         )) as any;
+    //         await NotificationHelper.info(
+    //             'Welcome to guardian',
+    //             'Next register your account in hedera',
+    //             user.id,
+    //         );
+    //         return user;
+    //     } catch (error) {
+    //         new Logger().error(error, ['API_GATEWAY']);
+    //         if (error.message.includes('already exists')) {
+    //             throw new HttpException('An account with the same name already exists.', HttpStatus.INTERNAL_SERVER_ERROR);
+    //         }
+    //         throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
     /**
      * Login

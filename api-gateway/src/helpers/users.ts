@@ -136,9 +136,9 @@ export class Users extends NatsService {
      * @param password
      * @param role
      */
-    public async registerNewUser(username: string, password: string, role: string) {
-        return await this.sendMessage(AuthEvents.REGISTER_NEW_USER, { username, password, role });
-    }
+    // public async registerNewUser(username: string, password: string, role: string) {
+    //     return await this.sendMessage(AuthEvents.REGISTER_NEW_USER, { username, password, role });
+    // }
 
     /**
      * Register new token
@@ -163,9 +163,9 @@ export class Users extends NatsService {
     /**
      * Get all user accounts demo
      */
-    public async getAllUserAccountsDemo() {
-        return await this.sendMessage(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO);
-    }
+    // public async getAllUserAccountsDemo() {
+    //     return await this.sendMessage(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO);
+    // }
 
     /**
      * Get all standard registries
@@ -290,9 +290,9 @@ export class UsersService {
      * @param password
      * @param role
      */
-    public async registerNewUser(username: string, password: string, role: string) {
-        return await this.users.registerNewUser(username, password, role);
-    }
+    // public async registerNewUser(username: string, password: string, role: string) {
+    //     return await this.users.registerNewUser(username, password, role);
+    // }
 
     /**
      * Register new token
@@ -317,9 +317,9 @@ export class UsersService {
     /**
      * Get all user accounts demo
      */
-    public async getAllUserAccountsDemo() {
-        return await this.users.getAllUserAccountsDemo();
-    }
+    // public async getAllUserAccountsDemo() {
+    //     return await this.users.getAllUserAccountsDemo();
+    // }
 
     /**
      * Get all standard registries
