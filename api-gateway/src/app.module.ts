@@ -3,7 +3,7 @@ import { AccountApi } from './api/service/account.js';
 import { AnalyticsApi } from './api/service/analytics.js';
 import { ArtifactApi } from './api/service/artifact.js';
 import { ContractsApi } from './api/service/contract.js';
-import { DemoApi } from './api/service/demo.js';
+//import { DemoApi } from './api/service/demo.js';
 import { ExternalApi } from './api/service/external.js';
 import { IpfsApi } from './api/service/ipfs.js';
 import { LoggerApi, LoggerService } from './api/service/logger.js';
@@ -64,7 +64,7 @@ import { WorkerTasksController } from './api/service/worker-tasks.js';
         AnalyticsApi,
         ArtifactApi,
         ContractsApi,
-        ...(ApplicationEnvironment.demoMode ? [DemoApi] : []),
+        //...(ApplicationEnvironment.demoMode ? [DemoApi] : []),
         ExternalApi,
         IpfsApi,
         LoggerApi,

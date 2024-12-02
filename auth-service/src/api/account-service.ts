@@ -13,7 +13,7 @@ import {
     IGenerateTokenMessage,
     IGenerateTokenResponse,
     IGetAllUserResponse,
-    IGetDemoUserResponse,
+    //IGetDemoUserResponse,
     IGetUserByIdMessage,
     IGetUserByTokenMessage,
     IGetUserMessage,
@@ -21,7 +21,7 @@ import {
     IGetUsersByIdMessage,
     IGetUsersByIRoleMessage,
     IGroup,
-    IRegisterNewUserMessage,
+    //IRegisterNewUserMessage,
     ISaveUserMessage,
     IStandardRegistryUserResponse,
     IUpdateUserMessage,
@@ -58,42 +58,42 @@ export function setDefaultPermissions(user: User): User {
     return user;
 }
 
-export async function createNewUser(
-    username: string,
-    password: string,
-    role: UserRole,
-    walletToken: string,
-    parent: string,
-    did: string,
-    provider: string,
-    providerId: string
-): Promise<User> {
-    const defaultRole = await new DataBaseHelper(DynamicRole).findOne({
-        owner: null,
-        default: true,
-        readonly: true
-    });
-    const permissionsGroup: IGroup[] = defaultRole ? [{
-        uuid: defaultRole.uuid,
-        roleId: defaultRole.id,
-        roleName: defaultRole.name,
-        owner: null
-    }] : [];
-    const permissions = defaultRole ? defaultRole.permissions : [];
-    const user = (new DataBaseHelper(User)).create({
-        username,
-        password,
-        role,
-        walletToken,
-        parent,
-        did,
-        provider,
-        providerId,
-        permissionsGroup,
-        permissions
-    });
-    return await (new DataBaseHelper(User)).save(user);
-}
+// export async function createNewUser(
+//     username: string,
+//     password: string,
+//     role: UserRole,
+//     walletToken: string,
+//     parent: string,
+//     did: string,
+//     provider: string,
+//     providerId: string
+// ): Promise<User> {
+//     const defaultRole = await new DataBaseHelper(DynamicRole).findOne({
+//         owner: null,
+//         default: true,
+//         readonly: true
+//     });
+//     const permissionsGroup: IGroup[] = defaultRole ? [{
+//         uuid: defaultRole.uuid,
+//         roleId: defaultRole.id,
+//         roleName: defaultRole.name,
+//         owner: null
+//     }] : [];
+//     const permissions = defaultRole ? defaultRole.permissions : [];
+//     const user = (new DataBaseHelper(User)).create({
+//         username,
+//         password,
+//         role,
+//         walletToken,
+//         parent,
+//         did,
+//         provider,
+//         providerId,
+//         permissionsGroup,
+//         permissions
+//     });
+//     return await (new DataBaseHelper(User)).save(user);
+// }
 
 /**
  * Account service
@@ -281,107 +281,107 @@ export class AccountService extends NatsService {
         /**
          * Get All
          */
-        this.getMessages<any, IGetDemoUserResponse[]>(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO, async (_) => {
-            try {
-                const userAccounts = (await new DataBaseHelper(User).find({
-                    template: { $ne: true }
-                })).map((e) => ({
-                    parent: e.parent,
-                    did: e.did,
-                    username: e.username,
-                    role: e.role
-                }));
-                return new MessageResponse(userAccounts);
-            } catch (error) {
-                new Logger().error(error, ['AUTH_SERVICE']);
-                return new MessageError(error);
-            }
-        });
+        // this.getMessages<any, IGetDemoUserResponse[]>(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO, async (_) => {
+        //     try {
+        //         const userAccounts = (await new DataBaseHelper(User).find({
+        //             template: { $ne: true }
+        //         })).map((e) => ({
+        //             parent: e.parent,
+        //             did: e.did,
+        //             username: e.username,
+        //             role: e.role
+        //         }));
+        //         return new MessageResponse(userAccounts);
+        //     } catch (error) {
+        //         new Logger().error(error, ['AUTH_SERVICE']);
+        //         return new MessageError(error);
+        //     }
+        // });
 
-        this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.REGISTER_NEW_USER, async (msg) => {
-            try {
-                const userRepository = new DataBaseHelper(User);
+        // this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.REGISTER_NEW_USER, async (msg) => {
+        //     try {
+        //         const userRepository = new DataBaseHelper(User);
 
-                const { username, password, role } = msg;
-                const passwordDigest = crypto.createHash('sha256').update(password).digest('hex');
+        //         const { username, password, role } = msg;
+        //         const passwordDigest = crypto.createHash('sha256').update(password).digest('hex');
 
-                const checkUserName = await userRepository.count({ username });
-                if (checkUserName) {
-                    return new MessageError('An account with the same name already exists.');
-                }
-                const user = await createNewUser(
-                    username,
-                    passwordDigest,
-                    role,
-                    '',
-                    null,
-                    null,
-                    null,
-                    null,
-                );
+        //         const checkUserName = await userRepository.count({ username });
+        //         if (checkUserName) {
+        //             return new MessageError('An account with the same name already exists.');
+        //         }
+        //         const user = await createNewUser(
+        //             username,
+        //             passwordDigest,
+        //             role,
+        //             '',
+        //             null,
+        //             null,
+        //             null,
+        //             null,
+        //         );
 
-                return new MessageResponse(getRequiredProps(user, REGISTER_REQUIRED_PROPS));
-            } catch (error) {
-                new Logger().error(error, ['AUTH_SERVICE']);
-                return new MessageError(error)
-            }
-        });
+        //         return new MessageResponse(getRequiredProps(user, REGISTER_REQUIRED_PROPS));
+        //     } catch (error) {
+        //         new Logger().error(error, ['AUTH_SERVICE']);
+        //         return new MessageError(error)
+        //     }
+        // });
 
-        this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.REGISTER_NEW_TEMPLATE,
-            async (msg: { role: string, did: string, parent: string }) => {
-                try {
-                    const { role, did, parent } = msg;
-                    const username = `template_${Date.now()}${Math.round(Math.random() * 1000)}`;
-                    const row = (new DataBaseHelper(User)).create({
-                        username,
-                        role,
-                        parent,
-                        did,
-                        template: true
-                    });
-                    const user = await (new DataBaseHelper(User)).save(row);
-                    return new MessageResponse(user);
-                } catch (error) {
-                    new Logger().error(error, ['AUTH_SERVICE']);
-                    return new MessageError(error)
-                }
-            });
+        // this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.REGISTER_NEW_TEMPLATE,
+        //     async (msg: { role: string, did: string, parent: string }) => {
+        //         try {
+        //             const { role, did, parent } = msg;
+        //             const username = `template_${Date.now()}${Math.round(Math.random() * 1000)}`;
+        //             const row = (new DataBaseHelper(User)).create({
+        //                 username,
+        //                 role,
+        //                 parent,
+        //                 did,
+        //                 template: true
+        //             });
+        //             const user = await (new DataBaseHelper(User)).save(row);
+        //             return new MessageResponse(user);
+        //         } catch (error) {
+        //             new Logger().error(error, ['AUTH_SERVICE']);
+        //             return new MessageError(error)
+        //         }
+        //     });
 
-        this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.GENERATE_NEW_TOKEN_BASED_ON_USER_PROVIDER,
-            async (msg: ProviderAuthUser) => {
-                try {
-                    let user = await (new DataBaseHelper(User))
-                        .findOne({ username: msg.username, template: { $ne: true } });
-                    if (!user) {
-                        user = await createNewUser(
-                            msg.username,
-                            null,
-                            msg.role,
-                            '',
-                            null,
-                            null,
-                            msg.provider,
-                            msg.providerId
-                        )
-                    }
-                    const secretManager = SecretManager.New();
-                    const { ACCESS_TOKEN_SECRET } = await secretManager.getSecrets('secretkey/auth')
-                    const accessToken = sign({
-                        username: user.username,
-                        did: user.did,
-                        role: user.role
-                    }, ACCESS_TOKEN_SECRET);
-                    return new MessageResponse({
-                        username: user.username,
-                        did: user.did,
-                        role: user.role,
-                        accessToken
-                    })
-                } catch (error) {
-                    new Logger().error(error, ['AUTH_SERVICE']);
-                    return new MessageError(error)
-                }
-            });
+        // this.getMessages<IRegisterNewUserMessage, User>(AuthEvents.GENERATE_NEW_TOKEN_BASED_ON_USER_PROVIDER,
+        //     async (msg: ProviderAuthUser) => {
+        //         try {
+        //             let user = await (new DataBaseHelper(User))
+        //                 .findOne({ username: msg.username, template: { $ne: true } });
+        //             if (!user) {
+        //                 user = await createNewUser(
+        //                     msg.username,
+        //                     null,
+        //                     msg.role,
+        //                     '',
+        //                     null,
+        //                     null,
+        //                     msg.provider,
+        //                     msg.providerId
+        //                 )
+        //             }
+        //             const secretManager = SecretManager.New();
+        //             const { ACCESS_TOKEN_SECRET } = await secretManager.getSecrets('secretkey/auth')
+        //             const accessToken = sign({
+        //                 username: user.username,
+        //                 did: user.did,
+        //                 role: user.role
+        //             }, ACCESS_TOKEN_SECRET);
+        //             return new MessageResponse({
+        //                 username: user.username,
+        //                 did: user.did,
+        //                 role: user.role,
+        //                 accessToken
+        //             })
+        //         } catch (error) {
+        //             new Logger().error(error, ['AUTH_SERVICE']);
+        //             return new MessageError(error)
+        //         }
+        //     });
 
         this.getMessages<IGenerateTokenMessage, IGenerateTokenResponse>(AuthEvents.GENERATE_NEW_TOKEN, async (msg) => {
             try {

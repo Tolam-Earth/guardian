@@ -60,61 +60,61 @@ export class AccountApi {
      * register
      * @param body
      */
-    @Post('/register')
-    @ApiOperation({
-        summary: 'Registers a new user account.',
-        description: 'Object that contain username, password and role (optional) fields.',
-    })
-    @ApiOkResponse({
-        description: 'Successful operation.',
-        type: AccountsResponseDTO
-    })
-    @ApiInternalServerErrorResponse({
-        description: 'Internal server error.',
-        type: InternalServerErrorDTO
-    })
-    @ApiExtraModels(AccountsResponseDTO, InternalServerErrorDTO)
-    @HttpCode(HttpStatus.CREATED)
-    async register(
-        @Body() body: RegisterUserDTO,
-        @Req() req: any
-    ): Promise<AccountsResponseDTO> {
-        const users = new Users();
-        if (!ApplicationEnvironment.demoMode) {
-            const authHeader = req.headers.authorization;
-            const token = authHeader?.split(' ')[1];
-            let user: IAuthUser | null;
-            try {
-                user = await users.getUserByToken(token) as IAuthUser;
-            } catch (e) {
-                user = null;
-            }
-            if (!user) {
-                throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
-            }
-            try {
-                await checkPermission(UserRole.STANDARD_REGISTRY)(user);
-            } catch (error) {
-                await InternalException(error);
-            }
-        }
-        try {
-            const { role, username, password } = body;
-            const user = (await users.registerNewUser(username, password, role));
-            await NotificationHelper.info(
-                'Welcome to guardian',
-                'Next register your account in hedera',
-                user.id,
-            );
-            return user;
-        } catch (error) {
-            new Logger().error(error, ['API_GATEWAY']);
-            if (error.message.includes('already exists')) {
-                throw new HttpException(error.message, HttpStatus.CONFLICT);
-            }
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // @Post('/register')
+    // @ApiOperation({
+    //     summary: 'Registers a new user account.',
+    //     description: 'Object that contain username, password and role (optional) fields.',
+    // })
+    // @ApiOkResponse({
+    //     description: 'Successful operation.',
+    //     type: AccountsResponseDTO
+    // })
+    // @ApiInternalServerErrorResponse({
+    //     description: 'Internal server error.',
+    //     type: InternalServerErrorDTO
+    // })
+    // @ApiExtraModels(AccountsResponseDTO, InternalServerErrorDTO)
+    // @HttpCode(HttpStatus.CREATED)
+    // async register(
+    //     @Body() body: RegisterUserDTO,
+    //     @Req() req: any
+    // ): Promise<AccountsResponseDTO> {
+    //     const users = new Users();
+    //     if (!ApplicationEnvironment.demoMode) {
+    //         const authHeader = req.headers.authorization;
+    //         const token = authHeader?.split(' ')[1];
+    //         let user: IAuthUser | null;
+    //         try {
+    //             user = await users.getUserByToken(token) as IAuthUser;
+    //         } catch (e) {
+    //             user = null;
+    //         }
+    //         if (!user) {
+    //             throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    //         }
+    //         try {
+    //             await checkPermission(UserRole.STANDARD_REGISTRY)(user);
+    //         } catch (error) {
+    //             await InternalException(error);
+    //         }
+    //     }
+    //     try {
+    //         const { role, username, password } = body;
+    //         const user = (await users.registerNewUser(username, password, role));
+    //         await NotificationHelper.info(
+    //             'Welcome to guardian',
+    //             'Next register your account in hedera',
+    //             user.id,
+    //         );
+    //         return user;
+    //     } catch (error) {
+    //         new Logger().error(error, ['API_GATEWAY']);
+    //         if (error.message.includes('already exists')) {
+    //             throw new HttpException(error.message, HttpStatus.CONFLICT);
+    //         }
+    //         throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
     /**
      * Login

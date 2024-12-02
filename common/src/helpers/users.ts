@@ -185,9 +185,9 @@ export class Users extends NatsService {
      * @param password
      * @param role
      */
-    public async registerNewUser(username: string, password: string, role: string): Promise<IAuthUser> {
-        return await this.sendMessage(AuthEvents.REGISTER_NEW_USER, { username, password, role });
-    }
+    // public async registerNewUser(username: string, password: string, role: string): Promise<IAuthUser> {
+    //     return await this.sendMessage(AuthEvents.REGISTER_NEW_USER, { username, password, role });
+    // }
 
     /**
      * Generate new token
@@ -215,9 +215,9 @@ export class Users extends NatsService {
     /**
      * Get all user accounts demo
      */
-    public async getAllUserAccountsDemo() {
-        return await this.sendMessage(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO);
-    }
+    // public async getAllUserAccountsDemo() {
+    //     return await this.sendMessage(AuthEvents.GET_ALL_USER_ACCOUNTS_DEMO);
+    // }
 
     /**
      * Generate new template
